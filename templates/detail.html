@@ -103,7 +103,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="/home" class="nav-link active">
+                <a href="/home" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Home</p>
                 </a>
@@ -115,7 +115,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 </a>
               </li>
                 <li class="nav-item">
-                <a href="/all" class="nav-link">
+                <a href="/all" class="nav-link active">
                   <i class="far fa-circle nav-icon"></i>
                   <p>View All</p>
                 </a>
@@ -137,7 +137,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0">Starter Page</h1>
+            <h1 class="m-0">文件信息</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -151,65 +151,32 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- /.content-header -->
 
     <!-- Main content -->
-    <div class="content">
+        <div class="content">
       <div class="container-fluid">
         <div class="row">
-          <div class="col-lg-6">
+          <div class="col-lg-10">
             <div class="card">
               <div class="card-body">
-                <h5 class="card-title">欢迎！这里是KWSGalcloud</h5>
+                <h5 class="card-title">文件: {{ makehtml[0][0] }}</h5>
 
                 <p class="card-text">
-                  KWSGalcloud是 灵感满溢的高性能战斗萝卜子 群自建的文件共享平台。 这里一般都是群里日常活动所需的文件。
+                    文件大小: {{ makehtml[0][5] }}
                 </p>
+                  <p class="card-text">
+                    目录: {{ makehtml[0][4] }}
+                      </p>
+                  <p class="card-text">
+                    下载链接: <a herf="{{ makehtml[0][2] }}">{{ makehtml[0][2] }}</a>
+                  </p>
+
 
               </div>
             </div>
-
-            <div class="card card-primary card-outline">
-              <div class="card-body">
-                <h5 class="card-title">关于这个小站</h5>
-
-                <p class="card-text">
-                  这个小站目前由hedgehog_qd运营。后端基于Python，前端基于AdminLTE框架修改。
-                </p>
-                <a href="https://hm.hedgehog-qd.xyz" class="card-link">HedgeMount</a>
-                <a href="https://github.com/hedgehog-qd/KWSGalcloud" class="card-link">OpenSource</a>
-              </div>
-            </div><!-- /.card -->
-          </div>
-          <!-- /.col-md-6 -->
-          <div class="col-lg-6">
-            <div class="card">
-              <div class="card-header">
-                <h5 class="m-0">搜索资源！</h5>
-              </div>
-              <div class="card-body">
-                <h6 class="card-title">搜索站内资源文件</h6>
-
-                <p class="card-text">从几大类文件里搜索一下~ 看看有没有你需要的^_^</p>
-                <a href="/s" class="btn btn-primary">去搜索页面！</a>
-              </div>
-            </div>
-
-            <div class="card card-primary card-outline">
-              <div class="card-header">
-                <h5 class="m-0">浏览全部文件</h5>
-              </div>
-              <div class="card-body">
-                <h6 class="card-title">浏览这里所有的文件</h6>
-
-                <p class="card-text">点击按钮，浏览小站全部的文件 >_<</p>
-                <a href="/all" class="btn btn-primary">浏览全部文件</a>
-
-              </div>
+    <!-- /.content -->
+  </div>
             </div>
           </div>
-          <!-- /.col-md-6 -->
         </div>
-        <!-- /.row -->
-      </div><!-- /.container-fluid -->
-    </div>
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->

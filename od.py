@@ -1,7 +1,9 @@
-import onedrivesdk
 import config
-import onedrivesdk
+#import onedrivesdk
 
+import db
+
+"""
 def connectod():
     redirect_uri = config.redirect_url
     client_secret = config.client_secret
@@ -24,3 +26,25 @@ def connectod():
     code = input('Paste code here: ')
 
     client.auth_provider.authenticate(code, redirect_uri, client_secret)
+    """
+
+def refreshdb():
+    return 0
+
+
+def refresh():
+    p = db.verifyRefreshDate()
+    if p == False:
+        print("date Error: you can't refresh the database toooo many times!")
+        return 1
+    else:
+        code = refreshdb()
+        if code == 0:
+            print("successfully refreshed the database!")
+            db.updateRefreshDate()
+            return 0
+        else:
+            return 2
+
+
+#connectod()

@@ -8,7 +8,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{{ appname }} | Home</title>
+  <title>{{ appname }} | Search</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -103,7 +103,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="/home" class="nav-link active">
+                <a href="/home" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Home</p>
                 </a>
@@ -115,7 +115,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 </a>
               </li>
                 <li class="nav-item">
-                <a href="/all" class="nav-link">
+                <a href="/all" class="nav-link active">
                   <i class="far fa-circle nav-icon"></i>
                   <p>View All</p>
                 </a>
@@ -137,12 +137,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0">Starter Page</h1>
+            <h1 class="m-0">查看所有的文件</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Starter Page</li>
+              <li class="breadcrumb-item"><a href="/home">Home</a></li>
+              <li class="breadcrumb-item active">Search</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
@@ -154,57 +154,46 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <div class="content">
       <div class="container-fluid">
         <div class="row">
-          <div class="col-lg-6">
-            <div class="card">
-              <div class="card-body">
-                <h5 class="card-title">欢迎！这里是KWSGalcloud</h5>
-
-                <p class="card-text">
-                  KWSGalcloud是 灵感满溢的高性能战斗萝卜子 群自建的文件共享平台。 这里一般都是群里日常活动所需的文件。
-                </p>
-
+        <div class="card-body">
+                <table id="example2" class="table table-bordered table-hover">
+                  <thead>
+                  <tr>
+                    <th>文件名/目录名</th>
+                    <th>类型</th>
+                    <th>路径</th>
+                    <th>大小</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  {% for i in content %}
+                  <tr>
+                  {% if i[3]==0 %}
+                  <td><a href="{{ "/d?f="+i[4]+"&n="+i[0] }}">{{ i[0] }}</a></td>
+                  {% else %}
+                  <td><a href="{{ "/all?r="+i[4]+"/"+i[0] }}">{{ i[0] }}</a></td>
+                  {% endif %}
+                      {% if i[3]==0 %}
+                      <td>文件</td>
+                      {% else %}
+                      <td>文件夹</td>
+                      {% endif %}
+                    <td>{{ i[4] }}</td>
+                    <td>{{ i[5] }}</td>
+                  </tr>
+                  {% endfor %}
+                  </tbody>
+                  <tfoot>
+                  <tr>
+                    <th>文件名/目录名</th>
+                    <th>类型</th>
+                    <th>路径</th>
+                    <th>大小</th>
+                  </tr>
+                  </tfoot>
+                </table>
               </div>
-            </div>
-
-            <div class="card card-primary card-outline">
-              <div class="card-body">
-                <h5 class="card-title">关于这个小站</h5>
-
-                <p class="card-text">
-                  这个小站目前由hedgehog_qd运营。后端基于Python，前端基于AdminLTE框架修改。
-                </p>
-                <a href="https://hm.hedgehog-qd.xyz" class="card-link">HedgeMount</a>
-                <a href="https://github.com/hedgehog-qd/KWSGalcloud" class="card-link">OpenSource</a>
-              </div>
-            </div><!-- /.card -->
-          </div>
           <!-- /.col-md-6 -->
-          <div class="col-lg-6">
-            <div class="card">
-              <div class="card-header">
-                <h5 class="m-0">搜索资源！</h5>
-              </div>
-              <div class="card-body">
-                <h6 class="card-title">搜索站内资源文件</h6>
 
-                <p class="card-text">从几大类文件里搜索一下~ 看看有没有你需要的^_^</p>
-                <a href="/s" class="btn btn-primary">去搜索页面！</a>
-              </div>
-            </div>
-
-            <div class="card card-primary card-outline">
-              <div class="card-header">
-                <h5 class="m-0">浏览全部文件</h5>
-              </div>
-              <div class="card-body">
-                <h6 class="card-title">浏览这里所有的文件</h6>
-
-                <p class="card-text">点击按钮，浏览小站全部的文件 >_<</p>
-                <a href="/all" class="btn btn-primary">浏览全部文件</a>
-
-              </div>
-            </div>
-          </div>
           <!-- /.col-md-6 -->
         </div>
         <!-- /.row -->
@@ -244,5 +233,37 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script src="{{ url_for('static', filename='plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 <!-- AdminLTE App -->
 <script src="{{ url_for('static', filename='dist/js/adminlte.min.js') }}"></script>
+<!-- Bootstrap 4 -->
+<script src="{{ url_for('static', filename='plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+<!-- DataTables  & Plugins -->
+<script src="{{ url_for('static', filename='plugins/datatables/jquery.dataTables.min.js') }}"></script>
+<script src="{{ url_for('static', filename='plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
+<script src="{{ url_for('static', filename='plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
+<script src="{{ url_for('static', filename='plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
+<script src="{{ url_for('static', filename='plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
+<script src="{{ url_for('static', filename='plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
+<script src="{{ url_for('static', filename='plugins/jszip/jszip.min.js') }}"></script>
+<script src="{{ url_for('static', filename='plugins/pdfmake/pdfmake.min.js') }}"></script>
+<script src="{{ url_for('static', filename='plugins/pdfmake/vfs_fonts.js') }}"></script>
+<script src="{{ url_for('static', filename='plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
+<script src="{{ url_for('static', filename='plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
+<script src="{{ url_for('static', filename='plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
+<script>
+  $(function () {
+    $("#example1").DataTable({
+      "responsive": true, "lengthChange": false, "autoWidth": false,
+      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+    $('#example2').DataTable({
+      "paging": true,
+      "lengthChange": false,
+      "searching": false,
+      "ordering": true,
+      "info": true,
+      "autoWidth": false,
+      "responsive": true,
+    });
+  });
+</script>
 </body>
 </html>
