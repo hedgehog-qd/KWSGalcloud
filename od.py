@@ -1,4 +1,7 @@
 import config
+import requests
+import json
+import  db
 #import onedrivesdk
 
 import db
@@ -28,7 +31,42 @@ def connectod():
     client.auth_provider.authenticate(code, redirect_uri, client_secret)
     """
 
+def request_data():
+    params = {
+        "path": config.alist_path,
+        "password": config.alist_passwd,
+    }
+    req = requests.post(config.alist_url, data=params)  # 请求连接
+    req_json = req.json()  # 获取数据
+    return req_json
+
 def refreshdb():
+    jsonn = request_data()
+    cursor = db.db.cursor()
+    print(jsonn)
+    print(" ")
+    json_str = json.dumps(jsonn)
+    data2 = json.loads(json_str)
+    print(data2['message'])
+    print(" ")
+    filesea = data2['data']
+    for i in filesea:
+        print('filename :' + i['name'])
+        print('uplink: ' + i['path'])
+        print('size: ' + str(i['size']))
+        pp = 0
+        if (i['type'] == 1):
+            pp = 1
+            print('type: ' + '1')
+        else:
+            pp = 0
+            print('type: ' + '0')
+        print('dlink: ' + i['path'] + '/' + i['name'])
+        sql = "INSERT into files set name=\"" + i['name'] + "\",uplink=\"" + i['path'] + "\",size=" + str(i['size']) + \
+              ",ftype=" + str(pp) + ",id=0,safename=\"0\"" + ",Dllink=\"" + i['path'] + '/' + i['name'] + "\";"
+        cursor.execute(sql)
+        db.db.commit()
+    print('done')
     return 0
 
 

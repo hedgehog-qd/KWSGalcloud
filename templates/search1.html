@@ -8,7 +8,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{{ appname }} | Home</title>
+  <title>{{ appname }} | Search</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -16,6 +16,37 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <link rel="stylesheet" href="{{ url_for('static', filename='plugins/fontawesome-free/css/all.min.css') }}">
   <!-- Theme style -->
   <link rel="stylesheet" href="{{ url_for('static', filename='dist/css/adminlte.min.css') }}">
+    <style type="text/css">
+    #box{
+        width: 700px;
+        margin: 30px auto;
+        font-family: 'Microsoft YaHei';
+        font-size: 25px;
+    }
+    input{
+        width: 600px;
+        border: 1px solid #e2e2e2;
+        height: 70px;
+        float: left;
+        background-image: url(images/search.jpg);
+        background-repeat: no-repeat;
+        background-size: 25px;
+        background-position:5px center;
+        padding:0 0 0 40px;
+    }
+    #search{
+        width: 100px;
+        height: 70px;
+        float: right;
+        background: black;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        line-height: 32px;
+        cursor: pointer;
+    }
+</style>
 </head>
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
@@ -109,13 +140,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 </a>
               </li>
               <li class="nav-item">
-                <a href="/s" class="nav-link">
+                <a href="/s" class="nav-link active">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Search</p>
                 </a>
               </li>
                 <li class="nav-item">
-                <a href="/all" class="nav-link active">
+                <a href="/all" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>View All</p>
                 </a>
@@ -137,12 +168,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0">文件信息</h1>
+            <h1 class="m-0">搜索</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Starter Page</li>
+              <li class="breadcrumb-item"><a href="/home">Home</a></li>
+              <li class="breadcrumb-item active">Search</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
@@ -151,65 +182,63 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- /.content-header -->
 
     <!-- Main content -->
-        <div class="content">
+    <div class="content">
       <div class="container-fluid">
         <div class="row">
-          <div class="col-lg-10">
-            <div class="card">
-              <div class="card-body">
-                <h5 class="card-title">文件: {{ makehtml[0][0] }}</h5>
 
-                <p class="card-text">
-                    文件大小: {{ makehtml[0][5] }}
-                </p>
-                  <p class="card-text">
-                    目录: {{ makehtml[0][4] }}
-                      </p>
-                  <p class="card-text">
-                    下载链接:
-                  </p>
-                    <a herf="{{ dlub + makehtml[0][2] }}">{{ dlub + makehtml[0][2] }}</a>
+          <!-- /.col-md-6 -->
+            <div id="box">
+                <input type="text" name="search" placeholder={{ searchback }} id="text">
+                <div class="pp" id="search">搜索!</div>
+            </div>
+            <script>
+                const btn = document.querySelector('.pp');
+                const texts = document.querySelector('#text');
+                btn.onclick = function() {
+                    const text = texts.value;
+                    let str = '';
+                    if(text == ''){
+                        alert('不能搜索空的内容喵~');
+                    }
+                    else{
+                        str='/s?name=';
+                        str += text;
+                        window.location.href = str; //重定向搜索内容
+                    }
 
-              </div>
-            </div>
-    <!-- /.content -->
-  </div>
-            </div>
-          </div>
+                }
+                document.onkeyup = function(e) { //键盘点击enter的时候模拟点击搜索按钮
+                    if (e.keyCode == 13) {
+                    btn.click();
+                    }
+                }
+            </script>
+
+          <!-- /.col-md-6 -->
         </div>
+
+
+
+        <!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+     <div class="container-fluid">
+         <div class="row">
+             <div class="col-12">
+                 <div class="card">
+                     <div class="card-header">
+                         <h3 class="card-title">搜索结果</h3>
+                     </div>
+                     <div class="card-body">
+                         <table id="example1" class="table table-bordered table-striped">
+                             <thead>
+                             <tr>
+                                 <th>文件名/目录名</th>
+                                 <th>类型</th>
+                                 <th>路径</th>
+                                 <th>大小</th>
+                             </tr>
+                             </thead>
+                             <tbody>
     <!-- /.content -->
-  </div>
-  <!-- /.content-wrapper -->
 
-  <!-- Control Sidebar -->
-  <aside class="control-sidebar control-sidebar-dark">
-    <!-- Control sidebar content goes here -->
-    <div class="p-3">
-      <h5>通告栏</h5>
-      <p>旧版Galcloud仍然可用，链接和访问密码不变。若新版出现问题请访问旧版</p>
-    </div>
-  </aside>
-  <!-- /.control-sidebar -->
-
-  <!-- Main Footer -->
-  <footer class="main-footer">
-    <!-- To the right -->
-    <div class="float-right d-none d-sm-inline">
-      Anything you want
-    </div>
-    <!-- Default to the left -->
-    <strong>{{ appname }} {{ appversion }} &copy; 2021-2022 <a href="https://hm.hedgehog-qd.xyz">HedgeMount</a>.</strong> 所有文件仅供群内交流使用，请在下载48小时内删除
-  </footer>
-</div>
-<!-- ./wrapper -->
-
-<!-- REQUIRED SCRIPTS -->
-
-<!-- jQuery -->
-<script src="{{ url_for('static', filename='plugins/jquery/jquery.min.js') }}"></script>
-<!-- Bootstrap 4 -->
-<script src="{{ url_for('static', filename='plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-<!-- AdminLTE App -->
-<script src="{{ url_for('static', filename='dist/js/adminlte.min.js') }}"></script>
-</body>
-</html>

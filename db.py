@@ -72,8 +72,10 @@ def search(searchtext):
 def getppDir(route):
     cursor = db.cursor()
     print(route)
+    """
     if 'root' in route:
         route = route[4:]
+        """
     sql = 'SELECT * FROM files WHERE uplink='+'\"'+route+'\"'
     cursor.execute(sql)
     rest = cursor.fetchall()
@@ -82,7 +84,7 @@ def getppDir(route):
 
 def gethome():
     cursor = db.cursor()
-    sql = "SELECT * FROM files WHERE uplink='root';"
+    sql = "SELECT * FROM files WHERE uplink='/root';"
     cursor.execute(sql)
     rest = cursor.fetchall()
     return rest

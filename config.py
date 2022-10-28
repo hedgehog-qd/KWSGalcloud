@@ -13,8 +13,10 @@ api_base_url='https://api.onedrive.com/v1.0/'
 scopes=['wl.signin', 'wl.offline_access', 'onedrive.readwrite']
 """
 #alist
-alist_url = ''
+alist_url = 'https://alist.noeldev.cc/api/public/search'
+alist_home = 'https://alist.noeldev.cc'
 alist_passwd = ''
+alist_path = '/root'
 
 #mysql
 database = 'kws'

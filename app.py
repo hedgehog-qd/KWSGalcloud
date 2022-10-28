@@ -34,7 +34,7 @@ def detailnull():
         fname = str(request.args['n'])
         ppfile = db.filedetail(froute,fname)
         return render_template('detail.html', appname=config.app_name, appversion=config.app_version,
-                               url=config.redirect_url, makehtml=ppfile)
+                               url=config.redirect_url, makehtml=ppfile, dlub = config.alist_home)
     else:
         return render_template('detailnull.html')
 
