@@ -1,6 +1,7 @@
 import config
 import requests
 import json
+import pymysql
 import  db
 #import onedrivesdk
 
@@ -41,8 +42,11 @@ def request_data():
     return req_json
 
 def refreshdb():
+    db = pymysql.connect(host=config.host, port=config.port, user=config.user_name, password=config.passwd,
+                         database=config.database, charset='utf8')
+    print("successfully connected to the database!")
     jsonn = request_data()
-    cursor = db.db.cursor()
+    cursor = db.cursor()
     print(jsonn)
     print(" ")
     json_str = json.dumps(jsonn)

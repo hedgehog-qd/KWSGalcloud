@@ -4,11 +4,13 @@ import app
 import datetime
 from time import strftime
 
-db = pymysql.connect(host=config.host, port=config.port, user=config.user_name, password=config.passwd,
-                     database=config.database, charset='utf8')
-print("successfully connected to the database!")
+
+
 
 def verifyRefreshDate():
+    db = pymysql.connect(host=config.host, port=config.port, user=config.user_name, password=config.passwd,
+                         database=config.database, charset='utf8')
+    print("successfully connected to the database!")
     cursor = db.cursor()
     sql = "SELECT * FROM refresh"
     cursor.execute(sql)
@@ -21,6 +23,9 @@ def verifyRefreshDate():
         return True
 
 def updateRefreshDate():
+    db = pymysql.connect(host=config.host, port=config.port, user=config.user_name, password=config.passwd,
+                         database=config.database, charset='utf8')
+    print("successfully connected to the database!")
     cursor = db.cursor()
     pp = datetime.date.today()
     p = pp.strftime("%Y-%m-%d")
@@ -34,6 +39,9 @@ def updateRefreshDate():
     return 0
 
 def search(searchtext):
+    db = pymysql.connect(host=config.host, port=config.port, user=config.user_name, password=config.passwd,
+                         database=config.database, charset='utf8')
+    print("successfully connected to the database!")
     sql = "SELECT * FROM files;"
     cursor = db.cursor()
     cursor.execute(sql)
@@ -70,6 +78,9 @@ def search(searchtext):
     return result
 
 def getppDir(route):
+    db = pymysql.connect(host=config.host, port=config.port, user=config.user_name, password=config.passwd,
+                         database=config.database, charset='utf8')
+    print("successfully connected to the database!")
     cursor = db.cursor()
     print(route)
     """
@@ -83,6 +94,9 @@ def getppDir(route):
     return rest
 
 def gethome():
+    db = pymysql.connect(host=config.host, port=config.port, user=config.user_name, password=config.passwd,
+                         database=config.database, charset='utf8')
+    print("successfully connected to the database!")
     cursor = db.cursor()
     sql = "SELECT * FROM files WHERE uplink='/root';"
     cursor.execute(sql)
@@ -90,6 +104,9 @@ def gethome():
     return rest
 
 def filedetail(route,name):
+    db = pymysql.connect(host=config.host, port=config.port, user=config.user_name, password=config.passwd,
+                         database=config.database, charset='utf8')
+    print("successfully connected to the database!")
     cursor = db.cursor()
     sql = 'SELECT * FROM files WHERE uplink='+'\"'+route+'\"'+'AND name='+'\"'+name+'\"'
     cursor.execute(sql)

@@ -27,6 +27,7 @@ def search():
                                url=config.redirect_url, makehtml="", searchback="想玩点儿啥gal？")
 
 
+
 @app.route('/d')
 def detailnull():
     if 'f' and 'n' in request.args:
