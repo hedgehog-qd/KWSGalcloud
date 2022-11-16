@@ -1,10 +1,6 @@
 import pymysql
 import config
-import app
 import datetime
-from time import strftime
-
-
 
 
 def verifyRefreshDate():

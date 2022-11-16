@@ -8,7 +8,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{{ appname }} | Search</title>
+  <title>{{ appName() }} | Search</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -112,7 +112,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- Brand Logo -->
     <a href="/home" class="brand-link">
       <img src="{{ url_for('static', filename='pics/AppLogo.jpg') }}" alt="Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-      <span class="brand-text font-weight-light">{{ appname }} {{ appversion }}</span>
+      <span class="brand-text font-weight-light">{{ appName() }} {{ appVersion() }}</span>
     </a>
 
     <!-- Sidebar -->
@@ -135,19 +135,19 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <ul class="nav nav-treeview">
               <li class="nav-item">
                 <a href="/home" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
+                  <i class="nav-icon fas fa-th"></i>
                   <p>Home</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="/s" class="nav-link active">
-                  <i class="far fa-circle nav-icon"></i>
+                  <i class="nav-icon fas fa-search"></i>
                   <p>Search</p>
                 </a>
               </li>
                 <li class="nav-item">
                 <a href="/all" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
+                  <i class="nav-icon fas fa-copy"></i>
                   <p>View All</p>
                 </a>
               </li>
@@ -296,7 +296,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       Anything you want
     </div>
     <!-- Default to the left -->
-    <strong>{{ appname }} {{ appversion }} &copy; 2021-2022 <a href="https://hm.hedgehog-qd.xyz">HedgeMount</a>.</strong> 所有文件仅供群内交流使用，请在下载48小时内删除
+    <strong>{{ appName() }} {{ appVersion() }} &copy; 2021-2022 <a href="https://hm.hedgehog-qd.xyz">HedgeMount</a>.</strong> 所有文件仅供群内交流使用，请在下载48小时内删除
   </footer>
 </div>
 <!-- ./wrapper -->
