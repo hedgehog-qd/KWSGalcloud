@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% block title %}头像 - Avatar{% endblock %}
+
+{% block page %}设置头像 - Avatar{% endblock %}
+
+{% block position %}
+    <li class="breadcrumb-item"><a href="/user">User</a></li>
+    <li class="breadcrumb-item active">Avatar</li>
+{% endblock %}
+
+{% block sidebar %}
+      <!-- Sidebar Menu -->
+      <nav class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+          <!-- Add icons to the links using the .nav-icon class
+               with font-awesome or any other icon font library -->
+          <li class="nav-item menu-open">
+            <a href="#" class="nav-link active">
+              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <p>
+                Profile
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="/home" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>基本信息 - Profile</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="/user/avatar" class="nav-link active">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>头像 - Avatar</p>
+                </a>
+              </li>
+                <li class="nav-item">
+                <a href="/user/integral" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>积分兑换 - integral</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+        </ul>
+      </nav>
+{% endblock %}
+
+{% block main %}
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <!-- left column -->
+          <div class="col-md-6">
+            <!-- general form elements -->
+            <div class="card card-primary">
+              <div class="card-header">
+                <h3 class="card-title">更改头像</h3>
+              </div>
+              <!-- /.card-header -->
+              <!-- form start -->
+              <form method=post enctype=multipart/form-data>
+                <div class="card-body">
+                  <div class="form-group">
+                    <p>我们建议您上传长宽比例为1:1的图像，分辨率在160x160以上</p>
+                  </div>
+                  <div class="form-group">
+                    <label for="exampleInputFile">上传头像</label>
+                    <div class="input-group">
+                      <div class="custom-file">
+                        <input name="avatar" type="file" class="custom-file-input" id="avatar">
+                        <label class="custom-file-label" for="exampleInputFile">选择文件</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- /.card-body -->
+
+                <div class="card-footer">
+                  <button type="submit" class="btn btn-primary">提交更改</button>
+                </div>
+              </form>
+            </div>
+            <!-- /.card -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+{% endblock %}

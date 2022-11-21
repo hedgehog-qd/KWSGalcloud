@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
-{% block title %}404{% endblock %}
+{% block title %}500{% endblock %}
 
 {% block position %}
     <li class="breadcrumb-item"><a href="#">ERROR</a></li>
-    <li class="breadcrumb-item active">404</li>
+    <li class="breadcrumb-item active">500</li>
 {% endblock %}
 
 {% block sidebar %}
@@ -54,16 +54,15 @@
     <!-- Main content -->
     <section class="content">
       <div class="error-page">
-        <h2 class="headline text-warning">404</h2>
+        <h2 class="headline text-danger">500</h2>
 
         <div class="error-content">
-          <h3><i class="fas fa-exclamation-triangle text-warning"></i> Oops! Page not found.</h3>
+          <h3><i class="fas fa-exclamation-triangle text-danger"></i> Oops! Something went wrong.</h3>
 
           <p>
-            We could not find the page you were looking for.
-            Meanwhile, you may <a href="/s">return to search page</a> and try again.
+            We will work on fixing that right away.
+            Meanwhile, you may <a href="/">return to home page</a> or try using the search form.
           </p>
-
 
         </div>
         <!-- /.error-content -->

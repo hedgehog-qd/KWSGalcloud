@@ -4,6 +4,10 @@
 app_name = 'KWSGalcloud'
 app_version = '2.1'
 
+#app settings
+secret_key = 'MS114514'
+initial_integral = 100
+
 #onedrive
 redirect_url = 'https://gc.noeldev.cc'
 """

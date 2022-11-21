@@ -18,6 +18,7 @@ def verifyRefreshDate():
     else:
         return True
 
+
 def updateRefreshDate():
     db = pymysql.connect(host=config.host, port=config.port, user=config.user_name, password=config.passwd,
                          database=config.database, charset='utf8')
@@ -26,13 +27,14 @@ def updateRefreshDate():
     pp = datetime.date.today()
     p = pp.strftime("%Y-%m-%d")
     print(p)
-    sql = "UPDATE refresh set refresh_date=\'"+str(p)+"\';"
+    sql = "UPDATE refresh set refresh_date=\'" + str(p) + "\';"
     cursor.execute(sql)
     sql2 = "UPDATE files set safename = lower(name);"
     cursor.execute(sql2)
     db.commit()
     print("refreshed the date")
     return 0
+
 
 def search(searchtext):
     db = pymysql.connect(host=config.host, port=config.port, user=config.user_name, password=config.passwd,
@@ -43,7 +45,7 @@ def search(searchtext):
     cursor.execute(sql)
     rest = cursor.fetchall()
     result = []
-    for i in rest:  #搜索
+    for i in rest:  # 搜索
         if searchtext in i[6]:
             result.append(i)
     """
@@ -73,6 +75,7 @@ def search(searchtext):
     """
     return result
 
+
 def getppDir(route):
     db = pymysql.connect(host=config.host, port=config.port, user=config.user_name, password=config.passwd,
                          database=config.database, charset='utf8')
@@ -83,11 +86,12 @@ def getppDir(route):
     if 'root' in route:
         route = route[4:]
         """
-    sql = 'SELECT * FROM files WHERE uplink='+'\"'+route+'\"'
+    sql = 'SELECT * FROM files WHERE uplink=' + '\"' + route + '\"'
     cursor.execute(sql)
     rest = cursor.fetchall()
 
     return rest
+
 
 def gethome():
     db = pymysql.connect(host=config.host, port=config.port, user=config.user_name, password=config.passwd,
@@ -99,12 +103,145 @@ def gethome():
     rest = cursor.fetchall()
     return rest
 
-def filedetail(route,name):
+
+def filedetail(route, name):
     db = pymysql.connect(host=config.host, port=config.port, user=config.user_name, password=config.passwd,
                          database=config.database, charset='utf8')
     print("successfully connected to the database!")
     cursor = db.cursor()
-    sql = 'SELECT * FROM files WHERE uplink='+'\"'+route+'\"'+'AND name='+'\"'+name+'\"'
+    sql = 'SELECT * FROM files WHERE uplink=' + '\"' + route + '\"' + 'AND name=' + '\"' + name + '\"'
     cursor.execute(sql)
     rest = cursor.fetchall()
     return rest
+
+
+def checklogin(email, pwd):
+    db = pymysql.connect(host=config.host, port=config.port, user=config.user_name, password=config.passwd,
+                         database=config.database, charset='utf8')
+    print("successfully connected to the database!")
+    cursor = db.cursor()
+    sql = 'SELECT passwd FROM users WHERE email=' + '"' + email + '"'
+    cursor.execute(sql)
+    a = cursor.fetchone()
+    if a is None:
+        print("用户不存在！")
+        return 2
+    else:
+        if a[0] != pwd:
+            print("密码错误！")
+            return 1
+        else:
+            print("成功登录！")
+            return 0
+
+
+def getuserdata(email):
+    db = pymysql.connect(host=config.host, port=config.port, user=config.user_name, password=config.passwd,
+                         database=config.database, charset='utf8')
+    print("successfully connected to the database!")
+    cursor = db.cursor()
+    sql = 'SELECT username FROM users WHERE email=' + '"' + email + '"'
+    cursor.execute(sql)
+    username = cursor.fetchone()
+    sql2 = 'SELECT is_admin FROM users WHERE email=' + '"' + email + '"'
+    cursor.execute(sql2)
+    is_admin = cursor.fetchone()
+    sql3 = 'SELECT is_ban FROM users WHERE email=' + '"' + email + '"'
+    cursor.execute(sql3)
+    is_ban = cursor.fetchone()
+    sql4 = 'SELECT avatar FROM users WHERE email=' + '"' + email + '"'
+    cursor.execute(sql4)
+    avatar = cursor.fetchone()
+    sql5 = 'SELECT uid FROM users WHERE email=' + '"' + email + '"'
+    cursor.execute(sql5)
+    uid = cursor.fetchone()
+    return username[0], is_admin[0], is_ban[0], avatar[0], uid[0]
+
+
+def getuserintegral(email):
+    db = pymysql.connect(host=config.host, port=config.port, user=config.user_name, password=config.passwd,
+                         database=config.database, charset='utf8')
+    print("successfully connected to the database!")
+    cursor = db.cursor()
+    sql2 = 'SELECT integral FROM users WHERE email=' + '"' + email + '"'
+    cursor.execute(sql2)
+    integral = cursor.fetchone()
+    return integral
+
+
+def register(email, uname, passwd, code):
+    db = pymysql.connect(host=config.host, port=config.port, user=config.user_name, password=config.passwd,
+                         database=config.database, charset='utf8')
+    print("successfully connected to the database!")
+    cursor = db.cursor()
+    sql = "SELECT count(*) from users where email=\"" + email + "\";"
+    cursor.execute(sql)
+    emails = cursor.fetchone()
+    print(emails[0])
+    if emails[0] != 0:
+        return 1  # 用户已经注册
+    cursor2 = db.cursor()
+    sql2 = 'SELECT code FROM register_code;'
+    cursor2.execute(sql2)
+    codes = cursor2.fetchall()
+    print(codes)  #
+    for i in codes:
+        if code == i[0]:
+            cursor4 = db.cursor()
+            sql3 = "SELECT available FROM register_code WHERE code=\"" + code + "\";"
+            cursor4.execute(sql3)
+            if cursor4.fetchone()[0] == 0:
+                print("激活码不对")
+                return 2  # 激活码已经不可用
+            else:
+                cursor3 = db.cursor()
+                sql1 = "INSERT INTO users SET email=\"" + email + "\",username=\"" + str(uname) + "\",passwd=\"" + str(passwd) + "\",is_admin=0,is_ban=0,integral=" + str(config.initial_integral) + ",avatar=\"default.jpg\";"
+                cursor3.execute(sql1)
+                db.commit()
+                print("OK")
+                return 0  # OK
+    print("激活码不存在")
+    return 3  # 激活码不存在
+
+
+def refreshavatar(email, newname):
+    db = pymysql.connect(host=config.host, port=config.port, user=config.user_name, password=config.passwd,
+                         database=config.database, charset='utf8')
+    print("successfully connected to the database!")
+    cursor = db.cursor()
+    sql = 'UPDATE users SET avatar="' + newname + '" WHERE email="' + email +'";'
+    cursor.execute(sql)
+    db.commit()
+    print("OK")
+    return 0
+
+
+def refreshintegral(uid, code):
+    db = pymysql.connect(host=config.host, port=config.port, user=config.user_name, password=config.passwd,
+                         database=config.database, charset='utf8')
+    print("successfully connected to the database!")
+    cursor = db.cursor()
+    sql = 'SELECT count(*) FROM integral_code WHERE code="' + str(code) + '";'
+    cursor.execute(sql)
+    codeexi = cursor.fetchone()[0]
+    if codeexi == 0:  # 激活码不存在
+        return 1
+    cursor2 = db.cursor()
+    sql2 = 'SELECT available FROM integral_code WHERE code="' + str(code) + '";'
+    cursor2.execute(sql2)
+    available = cursor2.fetchone()[0]
+    if available == 0:
+        return 2  # 激活码已经被使用了
+    cursor3 = db.cursor()
+    sql3 = 'UPDATE integral_code SET available=0,uid=' + str(uid) + ' WHERE code="' + str(code) + '";'
+    cursor3.execute(sql3)
+    db.commit()
+    cursor4 = db.cursor()
+    sql4 = 'SELECT integral FROM integral_code WHERE code="' + str(code) + '";'
+    cursor4.execute(sql4)
+    integral = cursor4.fetchone()[0]
+    cursor5 = db.cursor()
+    sql5 = 'UPDATE users SET integral=integral+' + str(integral) + ' WHERE uid=' + str(uid) + ';'
+    cursor5.execute(sql5)
+    db.commit()
+    return 0

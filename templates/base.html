@@ -15,6 +15,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <link rel="stylesheet" href="{{ url_for('static', filename='plugins/fontawesome-free/css/all.min.css') }}">
   <!-- Theme style -->
   <link rel="stylesheet" href="{{ url_for('static', filename='dist/css/adminlte.min.css') }}">
+<!-- Extra CSS -->
+{% block css %}{% endblock %}
 </head>
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
@@ -85,7 +87,25 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
     <!-- Sidebar -->
     <div class="sidebar">
+
+      <!-- Sidebar user panel (optional) -->
+      {% if session %}
+      <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+        <div class="image">
+          <img src="{{ url_for('static', filename='avatars/' + session['avatar']) }}" class="img-circle elevation-2" alt="User Image">
+        </div>
+        <div class="info">
+          <a href="/user" class="d-block">{{ session['username'] }}</a>
+        </div>
+      </div>
+      {% endif %}
         {% block sidebar %}{% endblock %}
+        {% if session %}
+        <a href="/logout" class="btn btn-block bg-gradient-primary btn-flat">登出</a>
+        {% else %}
+            <a href="/login" class="btn btn-block btn-outline-warning btn-flat">登录</a>
+            <a href="/register" class="btn btn-block btn-outline-primary btn-flat">注册</a>
+        {% endif %}
       <!-- /.sidebar-menu -->
     </div>
     <!-- /.sidebar -->
@@ -94,6 +114,35 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
+    {% if flash %}
+    <div class="
+            {% if status=='error' %}
+                alert alert-warning alert-dismissible
+            {% elif status=='success' %}
+                alert alert-success alert-dismissible
+            {% elif status=='ban' %}
+                alert alert-danger alert-dismissible
+            {% endif %}
+        ">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <h5><i class="
+            {% if status=='error' %}
+                icon fas fa-exclamation-triangle
+            {% elif status=='success' %}
+                icon fas fa-check
+            {% elif status=='ban' %}
+                icon fas fa-ban
+            {% endif %}
+        "></i>
+        {% if status=='error' %}
+          Warning
+          {% elif status=='success' %}
+          Notice
+          {% endif %}
+        </h5>
+        {{ flash }}
+    </div>
+    {% endif %}
     <div class="content-header">
       <div class="container-fluid">
         <div class="row mb-2">
@@ -112,7 +161,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 
     {% block main %}{% endblock %}
-
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
        <!-- Control Sidebar -->
   <aside class="control-sidebar control-sidebar-dark">
     <!-- Control sidebar content goes here -->
@@ -143,5 +194,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script src="{{ url_for('static', filename='plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 <!-- AdminLTE App -->
 <script src="{{ url_for('static', filename='dist/js/adminlte.min.js') }}"></script>
+<!-- Other Add-on JS -->
+{% block js %}{% endblock %}
+
 </body>
 </html>

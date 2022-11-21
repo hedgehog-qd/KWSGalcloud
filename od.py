@@ -69,7 +69,7 @@ def refreshdb():
         sql = "INSERT into files set name=\"" + i['name'] + "\",uplink=\"" + i['path'] + "\",size=" + str(i['size']) + \
               ",ftype=" + str(pp) + ",id=0,safename=\"0\"" + ",Dllink=\"" + i['path'] + '/' + i['name'] + "\";"
         cursor.execute(sql)
-        db.db.commit()
+        db.commit()
     print('done')
     return 0
 

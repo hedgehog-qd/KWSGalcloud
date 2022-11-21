@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block title %}积分兑换 - Integral{% endblock %}
+
+{% block page %}积分兑换 - Integral{% endblock %}
+
+{% block position %}
+    <li class="breadcrumb-item"><a href="/user">User</a></li>
+    <li class="breadcrumb-item active">Integral</li>
+{% endblock %}
+
+{% block sidebar %}
+      <!-- Sidebar Menu -->
+      <nav class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+          <!-- Add icons to the links using the .nav-icon class
+               with font-awesome or any other icon font library -->
+          <li class="nav-item menu-open">
+            <a href="#" class="nav-link active">
+              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <p>
+                Profile
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="/home" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>基本信息 - Profile</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="/user/avatar" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>头像 - Avatar</p>
+                </a>
+              </li>
+                <li class="nav-item">
+                <a href="/user/integral" class="nav-link active">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>积分兑换 - integral</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+{% endblock %}
+
+{% block main %}
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <!-- left column -->
+          <div class="col-md-6">
+    <div class="card card-info">
+    <div class="card-header">
+        <h3 class="card-title">Horizontal Form</h3>
+    </div>
+    <!-- /.card-header -->
+    <!-- form start -->
+        <form class="form-horizontal" action="/user/integral" method="post">
+            <div class="card-body">
+                <div class="form-group row">
+                    <label for="inputPassword3" class="col-sm-2 col-form-label">积分兑换码</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="code" name="code" placeholder="积分兑换码" onkeyup="checkpassword()">
+                    </div>
+                </div>
+                <!-- /.card-body -->
+                <div class="card-footer">
+                    <button type="submit" id="submit" class="btn btn-info">提交兑换</button>
+                </div>
+        </div>
+                <!-- /.card-footer -->
+    </form>
+    </div>
+            <!-- /.card -->
+          </div>
+        </div>
+      </div>
+    </section>
+{% endblock %}
+{% block js %}
+<script type="text/javascript">
+    document.getElementById("submit").disabled = true;
+    function checkpassword() {
+        document.getElementById("submit").disabled = true;
+        var check = document.getElementById("code").value;
+        if(check.length > 0){
+            document.getElementById("submit").disabled = false;
+        }
+    }
+</script>
+{% endblock %}
