@@ -295,3 +295,57 @@ def getRegisterCode():
     cursor.execute(sql)
     codes = cursor.fetchall()
     return codes
+
+
+def addUserCode(code):
+    db = pymysql.connect(host=config.host, port=config.port, user=config.user_name, password=config.passwd,
+                         database=config.database, charset='utf8')
+    print("successfully connected to the database!")
+    cursor = db.cursor()
+    sql = 'SELECT count(*) FROM register_code WHERE code="' + str(code) + '";'
+    cursor.execute(sql)
+    ava = cursor.fetchone()[0]
+    if ava != 0:
+        return 1  # 邀请码已经存在
+    cursor2 = db.cursor()
+    sql2 = 'INSERT INTO register_code SET code="' + str(code) + '",available=1;'
+    cursor2.execute(sql2)
+    db.commit()
+    return 0  # OK
+
+
+def banUser(uid):
+    db = pymysql.connect(host=config.host, port=config.port, user=config.user_name, password=config.passwd,
+                         database=config.database, charset='utf8')
+    print("successfully connected to the database!")
+    cursor = db.cursor()
+    sql = 'SELECT count(*) FROM users WHERE uid=' + str(uid) + ';'
+    cursor.execute(sql)
+    num = cursor.fetchone()[0]
+    if num == 0:
+        return 1  # 用户不存在
+    cursor2 = db.cursor()
+    sql2 = 'UPDATE users SET is_ban=1 WHERE uid=' + uid + ';'
+    cursor2.execute(sql2)
+    db.commit()
+    return 0  # OK
+
+
+def setRegisterCode(stat, code):
+    db = pymysql.connect(host=config.host, port=config.port, user=config.user_name, password=config.passwd,
+                         database=config.database, charset='utf8')
+    print("successfully connected to the database!")
+    cursor = db.cursor()
+    sql = 'SELECT count(*) FROM register_code WHERE code="' + str(code) + '";'
+    cursor.execute(sql)
+    stata = cursor.fetchone()[0]
+    if stata == 0:
+        return 1  # code不存在
+    cursor2 = db.cursor()
+    if int(stat) == 1:
+        sql2 = 'UPDATE register_code SET available=1 WHERE code="' + str(code) + '";'
+    if int(stat) == 0:
+        sql2 = 'UPDATE register_code SET available=0 WHERE code="' + str(code) + '";'
+    cursor2.execute(sql2)
+    db.commit()
+    return 0  # OK
