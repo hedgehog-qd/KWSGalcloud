@@ -242,6 +242,7 @@
                     <th>文件名/目录名</th>
                     <th>类型</th>
                     <th>路径</th>
+                    <th>下载量</th>
                     <th>大小</th>
                   </tr>
                   </thead>
@@ -260,6 +261,11 @@
                       <td>文件夹</td>
                       {% endif %}
                     <td>{{ i[4] }}</td>
+                    {% if i[3]==0 %}
+                    <td>{{ i[8] }}</td>
+                    {% else %}
+                    <td> </td>
+                    {% endif %}
                     <td>{{ i[5] }}</td>
                   </tr>
                   {% endfor %}

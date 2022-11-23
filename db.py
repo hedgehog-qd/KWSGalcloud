@@ -195,7 +195,9 @@ def register(email, uname, passwd, code):
                 return 2  # 激活码已经不可用
             else:
                 cursor3 = db.cursor()
-                sql1 = "INSERT INTO users SET email=\"" + email + "\",username=\"" + str(uname) + "\",passwd=\"" + str(passwd) + "\",is_admin=0,is_ban=0,integral=" + str(config.initial_integral) + ",avatar=\"default.jpg\";"
+                sql1 = "INSERT INTO users SET email=\"" + email + "\",username=\"" + str(uname) + "\",passwd=\"" + str(
+                    passwd) + "\",is_admin=0,is_ban=0,integral=" + str(
+                    config.initial_integral) + ",avatar=\"default.jpg\";"
                 cursor3.execute(sql1)
                 db.commit()
                 print("OK")
@@ -209,7 +211,7 @@ def refreshavatar(email, newname):
                          database=config.database, charset='utf8')
     print("successfully connected to the database!")
     cursor = db.cursor()
-    sql = 'UPDATE users SET avatar="' + newname + '" WHERE email="' + email +'";'
+    sql = 'UPDATE users SET avatar="' + newname + '" WHERE email="' + email + '";'
     cursor.execute(sql)
     db.commit()
     print("OK")
@@ -245,3 +247,51 @@ def refreshintegral(uid, code):
     cursor5.execute(sql5)
     db.commit()
     return 0
+
+
+def getFileCount():
+    db = pymysql.connect(host=config.host, port=config.port, user=config.user_name, password=config.passwd,
+                         database=config.database, charset='utf8')
+    print("successfully connected to the database!")
+    cursor = db.cursor()
+    sql = 'SELECT count(*) FROM files WHERE ftype=0;'
+    cursor.execute(sql)
+    files = cursor.fetchone()[0]
+    return files
+
+
+def getUserDownload(email):
+    db = pymysql.connect(host=config.host, port=config.port, user=config.user_name, password=config.passwd,
+                         database=config.database, charset='utf8')
+    print("successfully connected to the database!")
+    cursor = db.cursor()
+    sql = 'SELECT total_download FROM users WHERE email="' + email + '";'
+    cursor.execute(sql)
+    count = cursor.fetchone()[0]
+    return count
+
+
+def getUsersAdmin():
+    db = pymysql.connect(host=config.host, port=config.port, user=config.user_name, password=config.passwd,
+                         database=config.database, charset='utf8')
+    print("successfully connected to the database!")
+    cursor = db.cursor()
+    sql = 'SELECT count(*) FROM users WHERE is_ban=1;'
+    cursor.execute(sql)
+    bannedcount = cursor.fetchone()[0]
+    cursor2 = db.cursor()
+    sql2 = 'SELECT count(*) FROM users WHERE is_ban=0;'
+    cursor2.execute(sql2)
+    normalcount = cursor2.fetchone()[0]
+    return bannedcount, normalcount
+
+
+def getRegisterCode():
+    db = pymysql.connect(host=config.host, port=config.port, user=config.user_name, password=config.passwd,
+                         database=config.database, charset='utf8')
+    print("successfully connected to the database!")
+    cursor = db.cursor()
+    sql = 'SELECT * FROM register_code;'
+    cursor.execute(sql)
+    codes = cursor.fetchall()
+    return codes

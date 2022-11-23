@@ -9,9 +9,10 @@ from quart import session
 from quart import send_file
 from functools import wraps
 import os
-import db
 from blueprints.utils import flash
+import db
 from db import getuserintegral
+from db import getUserDownload
 import time
 from PIL import Image
 from blueprints.utils import crop_image
@@ -33,8 +34,9 @@ def login_required(func):
 @user.route('/')
 @login_required
 async def register():
-    getuserintegral(session['email'])
-    return await render_template('/user/home.html')
+    integ = getuserintegral(session['email'])[0]
+    shopping = getUserDownload(session['email'])
+    return await render_template('/user/home.html', integ=integ, shopping=shopping)
 
 
 @user.route('/avatar', methods=['GET', 'POST'])

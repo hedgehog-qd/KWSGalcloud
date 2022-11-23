@@ -37,6 +37,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <li class="nav-item d-none d-sm-inline-block">
         <a href="/all" class="nav-link">View All</a>
       </li>
+        {% if session['is_admin'] == 1 %}
+        <li class="nav-item d-none d-sm-inline-block">
+        <a href="/admin" class="nav-link">Admin Panel</a>
+      </li>
+        {% endif %}
     </ul>
 
     <!-- Right navbar links -->
@@ -89,7 +94,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <div class="sidebar">
 
       <!-- Sidebar user panel (optional) -->
-      {% if session %}
+      {% if session['avatar'] %}
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
           <img src="{{ url_for('static', filename='avatars/' + session['avatar']) }}" class="img-circle elevation-2" alt="User Image">
@@ -100,7 +105,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       </div>
       {% endif %}
         {% block sidebar %}{% endblock %}
-        {% if session %}
+        {% if session['email'] %}
         <a href="/logout" class="btn btn-block bg-gradient-primary btn-flat">登出</a>
         {% else %}
             <a href="/login" class="btn btn-block btn-outline-warning btn-flat">登录</a>

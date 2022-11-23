@@ -1,13 +1,13 @@
 {% extends 'base.html' %}
 
-{% block title %}All Files{% endblock %}
+{% block title %}Integral - 积分管理{% endblock %}
+
+{% block page %}Integral - 积分管理{% endblock %}
 
 {% block position %}
-    <li class="breadcrumb-item"><a href="#">Home</a></li>
-    <li class="breadcrumb-item active">View All</li>
+    <li class="breadcrumb-item"><a href="/admin">Admin</a></li>
+    <li class="breadcrumb-item active">Admin Panel</li>
 {% endblock %}
-
-{% block page %}View All{% endblock %}
 
 {% block sidebar %}
       <!-- Sidebar Menu -->
@@ -19,27 +19,27 @@
             <a href="#" class="nav-link active">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
-                Starter Pages
+                Admin Panel
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="/home" class="nav-link">
-                  <i class="nav-icon fas fa-th"></i>
-                  <p>Home</p>
+                <a href="/admin" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>概览</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="/s" class="nav-link">
-                  <i class="nav-icon fas fa-search"></i>
-                  <p>Search</p>
+                <a href="/admin/users" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>用户群体</p>
                 </a>
               </li>
                 <li class="nav-item">
-                <a href="/all" class="nav-link active">
-                  <i class="nav-icon fas fa-copy"></i>
-                  <p>View All</p>
+                <a href="/admin/integral" class="nav-link active">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>积分管理</p>
                 </a>
               </li>
             </ul>
@@ -48,20 +48,25 @@
         </ul>
       </nav>
 {% endblock %}
+
 {% block main %}
     <!-- Main content -->
     <div class="content">
       <div class="container-fluid">
         <div class="row">
-        <div class="card-body">
-                <table id="example2" class="table table-bordered table-hover">
+        <div class="col-md-6">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">注册邀请码</h3>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
+                  <table id="example2" class="table table-bordered table-hover">
                   <thead>
                   <tr>
-                    <th>文件名/目录名</th>
-                    <th>类型</th>
-                    <th>路径</th>
-                    <th>下载量</th>
-                    <th>大小</th>
+                    <th>注册邀请码</th>
+                    <th>是否可用</th>
+                    <th>操作</th>
                   </tr>
                   </thead>
                   <tbody>
@@ -78,35 +83,44 @@
                       <td>文件夹</td>
                       {% endif %}
                     <td>{{ i[4] }}</td>
-                    {% if i[3]==0 %}
-                    <td>{{ i[8] }}</td>
-                    {% else %}
-                    <td> </td>
-                    {% endif %}
                     <td>{{ i[5] }}</td>
                   </tr>
                   {% endfor %}
                   </tbody>
-                  <tfoot>
-                  <tr>
-                    <th>文件名/目录名</th>
-                    <th>类型</th>
-                    <th>路径</th>
-                    <th>大小</th>
-                  </tr>
-                  </tfoot>
                 </table>
               </div>
           <!-- /.col-md-6 -->
-
           <!-- /.col-md-6 -->
         </div>
+            <div class="card card-info">
+    <div class="card-header">
+        <h3 class="card-title">积分兑换</h3>
+    </div>
+    <!-- /.card-header -->
+    <!-- form start -->
+        <form class="form-horizontal" action="/user/integral" method="post">
+            <div class="card-body">
+                <div class="form-group row">
+                    <label for="inputPassword3" class="col-sm-2 col-form-label">积分兑换码</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="code" name="code" placeholder="积分兑换码" onkeyup="checkpassword()">
+                    </div>
+                </div>
+                <!-- /.card-body -->
+                <div class="card-footer">
+                    <button type="submit" id="submit" class="btn btn-info">提交兑换</button>
+                </div>
+        </div>
+                <!-- /.card-footer -->
+    </form>
+    </div>
+            <!-- /.card -->
         <!-- /.row -->
       </div><!-- /.container-fluid -->
     </div>
-    <!-- /.content -->
+      </div>
+    </div>
 {% endblock %}
-  <!-- Control Sidebar -->
 {% block js %}
 <!-- DataTables  & Plugins -->
 <script src="{{ url_for('static', filename='plugins/datatables/jquery.dataTables.min.js') }}"></script>
@@ -137,5 +151,15 @@
       "responsive": true,
     });
   });
+</script>
+<script type="text/javascript">
+    document.getElementById("submit").disabled = true;
+    function checkpassword() {
+        document.getElementById("submit").disabled = true;
+        var check = document.getElementById("code").value;
+        if(check.length > 0){
+            document.getElementById("submit").disabled = false;
+        }
+    }
 </script>
 {% endblock %}

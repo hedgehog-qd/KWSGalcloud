@@ -152,7 +152,7 @@ async def logout_():
     del session['email']
     del session['is_admin']
     del session['avatar']
-    return await flash('success', '成功登出!', 'home')
+    return await flash('success', '成功登出!', 'login')
 
 
 """

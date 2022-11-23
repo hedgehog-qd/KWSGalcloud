@@ -1,0 +1,298 @@
+{% extends 'base.html' %}
+
+{% block title %}Users - 用户群体{% endblock %}
+
+{% block page %}Users - 用户群体{% endblock %}
+
+{% block position %}
+    <li class="breadcrumb-item"><a href="/admin">Admin</a></li>
+    <li class="breadcrumb-item active">Admin Panel</li>
+{% endblock %}
+
+{% block sidebar %}
+      <!-- Sidebar Menu -->
+      <nav class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+          <!-- Add icons to the links using the .nav-icon class
+               with font-awesome or any other icon font library -->
+          <li class="nav-item menu-open">
+            <a href="#" class="nav-link active">
+              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <p>
+                Admin Panel
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="/admin" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>概览</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="/admin/users" class="nav-link active">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>用户群体</p>
+                </a>
+              </li>
+                <li class="nav-item">
+                <a href="/admin/integral" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>积分管理</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+        </ul>
+      </nav>
+{% endblock %}
+
+{% block main %}
+<!-- Main content -->
+    <div class="content">
+      <div class="container-fluid">
+        <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">注册邀请码</h3>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
+                  <table id="example2" class="table table-bordered table-hover">
+                  <thead>
+                  <tr>
+                    <th>注册邀请码</th>
+                    <th>是否可用</th>
+                    <th>操作</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  {% for i in content %}
+                  <tr>
+                  <td>{{ i[0] }}</td>
+                  {% if i[1]==0 %}
+                  <td><font color='red'>不可用</font></td>
+                  {% else %}
+                  <td><font color='green'>可用</font></td>
+                  {% endif %}
+                  {% if i[1]==1 %}
+                   <td>
+                    <input type="button" class="btn btn-block btn-outline-danger" id="da" value="禁用" onclick="{{ "f" + i[0] }}()"/>
+
+                  </td>
+                  {% else %}
+                  <td>
+                    <input type="button" class="btn btn-block btn-outline-success" id="import-submit" value="启用", onclick="{{ "f" + i[0] }}()"/>
+
+                  </td>
+                  {% endif %}
+                  </tr>
+                  {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+          <!-- /.col-md-6 -->
+        </div>
+    <div class="card card-info">
+    <div class="card-header">
+        <h3 class="card-title">添加注册邀请码</h3>
+    </div>
+    <!-- /.card-header -->
+    <!-- form start -->
+        <form class="form-horizontal" action="/admin/adduser" method="post">
+            <div class="card-body">
+                <div class="form-group row">
+                    <label for="inputPassword3" class="col-sm-2 col-form-label">添加注册邀请码</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="code" name="code" placeholder="添加注册邀请码" onkeyup="checkpassword()">
+                    </div>
+                </div>
+                <!-- /.card-body -->
+                <div class="card-footer">
+                    <button type="submit" id="submit" class="btn btn-info">提交</button>
+                </div>
+        </div>
+                <!-- /.card-footer -->
+    </form>
+    </div>
+            <!-- /.card -->
+        <!-- /.row -->
+
+      </div><!-- /.container-fluid -->
+        <div class="col-lg-6">
+            <!-- DONUT CHART -->
+            <div class="card card-danger">
+              <div class="card-header">
+                <h3 class="card-title">用户群体分布</h3>
+
+                <div class="card-tools">
+                  <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                    <i class="fas fa-minus"></i>
+                  </button>
+                  <button type="button" class="btn btn-tool" data-card-widget="remove">
+                    <i class="fas fa-times"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="card-body">
+                <canvas id="donutChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+            
+            <div class="card card-info">
+            <div class="card-header">
+                <h3 class="card-title">禁用用户</h3>
+            </div>
+            <!-- /.card-header -->
+            <!-- form start -->
+            <form class="form-horizontal" action="/admin/banuser" method="post">
+            <div class="card-body">
+                <div class="form-group row">
+                    <label for="inputPassword3" class="col-sm-2 col-form-label">禁用用户</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="ban" name="ban" placeholder="UID" onkeyup="checkban()">
+                    </div>
+                </div>
+                <!-- /.card-body -->
+                <div class="card-footer">
+                    <button type="submit" id="submitban" class="btn btn-info">提交</button>
+                </div>
+        </div>
+                <!-- /.card-footer -->
+    </form>
+    </div>
+        </div>
+    </div>
+
+      </div>
+    </div>
+{% endblock %}
+{% block js %}
+<!-- DataTables  & Plugins -->
+<script src="{{ url_for('static', filename='plugins/datatables/jquery.dataTables.min.js') }}"></script>
+<script src="{{ url_for('static', filename='plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
+<script src="{{ url_for('static', filename='plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
+<script src="{{ url_for('static', filename='plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
+<script src="{{ url_for('static', filename='plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
+<script src="{{ url_for('static', filename='plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
+<script src="{{ url_for('static', filename='plugins/jszip/jszip.min.js') }}"></script>
+<script src="{{ url_for('static', filename='plugins/pdfmake/pdfmake.min.js') }}"></script>
+<script src="{{ url_for('static', filename='plugins/pdfmake/vfs_fonts.js') }}"></script>
+<script src="{{ url_for('static', filename='plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
+<script src="{{ url_for('static', filename='plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
+<script src="{{ url_for('static', filename='plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
+<script>
+  $(function () {
+    $("#example1").DataTable({
+      "responsive": true, "lengthChange": false, "autoWidth": false,
+      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+    $('#example2').DataTable({
+      "paging": true,
+      "lengthChange": false,
+      "searching": false,
+      "ordering": true,
+      "info": true,
+      "autoWidth": false,
+      "responsive": true,
+    });
+  });
+</script>
+<script type="text/javascript">
+    document.getElementById("submit").disabled = true;
+    function checkpassword() {
+        document.getElementById("submit").disabled = true;
+        var check = document.getElementById("code").value;
+        if(check.length > 0){
+            document.getElementById("submit").disabled = false;
+        }
+    }
+</script>
+    <script type="text/javascript">
+    document.getElementById("submitban").disabled = true;
+    function checkban() {
+        document.getElementById("submitban").disabled = true;
+        var check = document.getElementById("ban").value;
+        if(check.length > 0){
+            document.getElementById("submitban").disabled = false;
+        }
+    }
+</script>
+<script type="text/javascript">
+    {% for i in content %}
+    function {{ "f" + i[0] }}() {
+        var formData = new FormData();
+        {% if i[1]==0 %}
+         formData.append('statto', '1');
+         formData.append('codeto', '{{ i[0] }}');
+        {% else %}
+         formData.append('statto', '0');
+         formData.append('codeto', '{{ i[0] }}');
+        {% endif %}
+        $.ajax({
+			url:  '/admin/users',
+            type: 'POST',
+            async: false,
+            data: formData,
+            processData: false,// 告诉jQuery不要去处理发送的数据
+            contentType: false,// 告诉jQuery不要去设置Content-Type请求头
+            beforeSend: function () {//过程...
+                console.log('正在进行，请稍候')
+            },
+            success: function (res) {
+                if (res == '1') {
+                    console.log('导入成功')
+                    location.reload();
+                } else {
+                    console.log('导入失败')
+                    alert('oops! 发生了错误')
+                }
+            },
+            error:function(){
+                console.log('导入失败')
+                alert('oops! 发生了错误')
+            }
+        })
+    }
+    {% endfor %}
+</script>
+    <!-- ChartJS -->
+<script src="{{ url_for('static', filename='plugins/chart.js/Chart.min.js') }}"></script>
+<script>
+$(function () {
+    //-------------
+    //- DONUT CHART -
+    //-------------
+    // Get context with jQuery - using jQuery's .get() method.
+    var donutChartCanvas = $('#donutChart').get(0).getContext('2d')
+    var donutData        = {
+      labels: [
+          '被ban的用户',
+          '正常的用户',
+      ],
+      datasets: [
+        {
+          data: [{{banned}}, {{ normal }}],
+          backgroundColor : ['#f56954', '#00c0ef'],
+        }
+      ]
+    }
+    var donutOptions     = {
+      maintainAspectRatio : false,
+      responsive : true,
+    }
+        //Create pie or douhnut chart
+    // You can switch between pie and douhnut using the method below.
+    new Chart(donutChartCanvas, {
+      type: 'doughnut',
+      data: donutData,
+      options: donutOptions
+    })
+      })
+</script>
+{% endblock %}
