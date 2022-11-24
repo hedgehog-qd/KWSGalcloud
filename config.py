@@ -20,7 +20,7 @@ scopes=['wl.signin', 'wl.offline_access', 'onedrive.readwrite']
 alist_url = 'https://alist.noeldev.cc/api/public/search'
 alist_home = 'https://alist.noeldev.cc'
 alist_passwd = ''
-alist_path = '/root'
+alist_path = '/'
 
 #mysql
 database = 'kws'

@@ -25,6 +25,8 @@ def login_required(func):
     async def wrapper(*args, **kwargs):
         if not session:
             return await flash('error', 'You must be logged in to access that page.', 'login')
+        if not session['email']:
+            return await flash('error', 'You must be logged in to access that page.', 'login')
         return await func(*args, **kwargs)
 
     return wrapper

@@ -1,13 +1,47 @@
 {% extends 'base.html' %}
 
-{% block title %}All Files{% endblock %}
+{% block title %}Home{% endblock %}
+
+    {% block css %}
+        <style type="text/css">
+    #box{
+        width: 700px;
+        margin: 30px auto;
+        font-family: 'Microsoft YaHei';
+        font-size: 25px;
+    }
+    input{
+        width: 600px;
+        border: 1px solid #e2e2e2;
+        height: 70px;
+        float: left;
+        background-image: url(images/search.jpg);
+        background-repeat: no-repeat;
+        background-size: 25px;
+        background-position:5px center;
+        padding:0 0 0 40px;
+    }
+    #search{
+        width: 100px;
+        height: 70px;
+        float: right;
+        background: black;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        line-height: 32px;
+        cursor: pointer;
+    }
+</style>
+    {% endblock %}
 
 {% block position %}
     <li class="breadcrumb-item"><a href="#">Home</a></li>
-    <li class="breadcrumb-item active">View All</li>
+    <li class="breadcrumb-item active">Starter Page</li>
 {% endblock %}
 
-{% block page %}View All{% endblock %}
+{% block page %}Starter Page{% endblock %}
 
 {% block sidebar %}
       <!-- Sidebar Menu -->
@@ -31,13 +65,13 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="/s" class="nav-link">
+                <a href="/s" class="nav-link active">
                   <i class="nav-icon fas fa-search"></i>
                   <p>Search</p>
                 </a>
               </li>
                 <li class="nav-item">
-                <a href="/all" class="nav-link active">
+                <a href="/all" class="nav-link">
                   <i class="nav-icon fas fa-copy"></i>
                   <p>View All</p>
                 </a>
@@ -53,7 +87,29 @@
     <div class="content">
       <div class="container-fluid">
         <div class="row">
-        <div class="card-body">
+
+          <!-- /.col-md-6 -->
+            <div id="box">
+                <input type="text" name="search" placeholder={{ searchback }} id="text">
+                <div class="pp" id="search">搜索!</div>
+            </div>
+
+
+          <!-- /.col-md-6 -->
+        </div>
+
+        <!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">搜索结果</h3>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
                 <table id="example2" class="table table-bordered table-hover">
                   <thead>
                   <tr>
@@ -65,13 +121,14 @@
                   </tr>
                   </thead>
                   <tbody>
-                  {% for i in content %}
+                  {% for i in makehtml %}
                   <tr>
                   {% if i[3]==0 %}
-                  <td><a href="{{ "/d?f="+i[4]+"&n="+i[9] }}">{{ i[0] }}</a></td>
+                  <td><a href="{{ "/d?f="+i[4]+"&n="+i[0] }}">{{ i[0] }}</a></td>
                   {% else %}
                   <td><a href="{{ "/all?r="+i[4]+"/"+i[0] }}">{{ i[0] }}</a></td>
                   {% endif %}
+
                       {% if i[3]==0 %}
                       <td>文件</td>
                       {% else %}
@@ -97,17 +154,20 @@
                   </tfoot>
                 </table>
               </div>
-          <!-- /.col-md-6 -->
+              <!-- /.card-body -->
+            </div>
 
-          <!-- /.col-md-6 -->
+          </div>
+          <!-- /.col -->
         </div>
         <!-- /.row -->
-      </div><!-- /.container-fluid -->
-    </div>
-    <!-- /.content -->
-{% endblock %}
-  <!-- Control Sidebar -->
+      </div>
+  {% endblock %}
+
+
 {% block js %}
+<!-- Bootstrap 4 -->
+<script src="{{ url_for('static', filename='plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 <!-- DataTables  & Plugins -->
 <script src="{{ url_for('static', filename='plugins/datatables/jquery.dataTables.min.js') }}"></script>
 <script src="{{ url_for('static', filename='plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
@@ -138,4 +198,26 @@
     });
   });
 </script>
+    <script>
+                const btn = document.querySelector('.pp');
+                const texts = document.querySelector('#text');
+                btn.onclick = function() {
+                    const text = texts.value;
+                    let str = '';
+                    if(text == ''){
+                        alert('不能搜索空的内容喵~');
+                    }
+                    else{
+                        str='/s?name=';
+                        str += text;
+                        window.location.href = str; //重定向搜索内容
+                    }
+
+                }
+                document.onkeyup = function(e) { //键盘点击enter的时候模拟点击搜索按钮
+                    if (e.keyCode == 13) {
+                    btn.click();
+                    }
+                }
+            </script>
 {% endblock %}

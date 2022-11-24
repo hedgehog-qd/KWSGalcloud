@@ -2,7 +2,9 @@ import config
 import requests
 import json
 import pymysql
-import  db
+import db
+from urllib.parse import urlencode
+
 #import onedrivesdk
 
 import db
@@ -66,8 +68,10 @@ def refreshdb():
             pp = 0
             print('type: ' + '0')
         print('dlink: ' + i['path'] + '/' + i['name'])
+        params1 = {'': i['name']}
+        downloadsafe = urlencode(params1)[1:]
         sql = "INSERT into files set name=\"" + i['name'] + "\",uplink=\"" + i['path'] + "\",size=" + str(i['size']) + \
-              ",ftype=" + str(pp) + ",id=0,safename=\"0\"" + ",Dllink=\"" + i['path'] + '/' + i['name'] + "\";"
+              ",ftype=" + str(pp) + ",id=0,safename=\"0\"" + ",Dllink=\"" + i['path'] + '/' + i['name'] + "\",safedownload=\"" + str(downloadsafe) + "\";"
         cursor.execute(sql)
         db.commit()
     print('done')

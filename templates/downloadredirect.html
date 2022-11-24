@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ appName() }} | Downloading...</title>
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- icheck bootstrap -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
+    <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='plugins/fontawesome-free/css/all.min.css') }}">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='dist/css/adminlte.min.css') }}">
+</head>
+<body class="hold-transition login-page">
+{% if flash %}
+    <div class="
+            {% if status=='error' %}
+                alert alert-warning alert-dismissible
+            {% elif status=='success' %}
+                alert alert-success alert-dismissible
+            {% elif status=='ban' %}
+                alert alert-danger alert-dismissible
+            {% endif %}
+        ">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <h5><i class="
+            {% if status=='error' %}
+                icon fas fa-exclamation-triangle
+            {% elif status=='success' %}
+                icon fas fa-check
+            {% elif status=='ban' %}
+                icon fas fa-ban
+            {% endif %}
+        "></i>
+        {% if status=='error' %}
+          Warning
+          {% elif status=='success' %}
+          Notice
+          {% endif %}
+        </h5>
+        {{ flash }}
+    </div>
+{% endif %}
+<div class="login-box">
+  <!-- /.login-logo -->
+  <div class="card card-outline card-primary">
+    <div class="card-header text-center">
+      <a href="/" class="h1">{{ appName() }} || 下载资源</a>
+    </div>
+    <div class="card-body">
+      <p class="login-box-msg">下载已经开始，如果没有主动开始请点击下面的链接</p>
+        <a href="{{ url }}" target="_blank" rel="noopener noreferrer">下载文件</a>
+    </div>
+    <!-- /.card-body -->
+  </div>
+  <!-- /.card -->
+</div>
+<!-- /.login-box -->
+
+<!-- jQuery -->
+<script src="{{ url_for('static', filename='plugins/jquery/jquery.min.js') }}"></script>
+<!-- Bootstrap 4 -->
+<script src="{{ url_for('static', filename='plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+<!-- AdminLTE App -->
+<script src="{{ url_for('static', filename='dist/js/adminlte.min.js') }}"></script>
+
+<script type="text/javascript">
+
+</script>
+</body>
+</html>

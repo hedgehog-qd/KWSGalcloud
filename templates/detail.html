@@ -75,7 +75,7 @@
                     <font color='#ff1493'>下载本资源需要: {{ makehtml[0][7] }} 积分，您现在有: {{ user_integral[0] }} 积分</font>
                 </p>
                   <div class="col-4">
-                        <button id='download' name='download' type="submit" class="btn btn-primary btn-block">下载</button>
+                        <button onclick="go()" id='download' name='download' type="submit" class="btn btn-primary btn-block">下载</button>
                   </div>
                   {% if makehtml[0][7] > user_integral[0] %}
                   <br><font color='red'>× 您的积分不足！</font>
@@ -92,4 +92,11 @@
           </div>
         </div>
     <!-- /.content -->
+{% endblock %}
+{% block js %}
+<script>
+function go() {
+    window.location.href="/dl?route={{ makehtml[0][4] }}&name={{ makehtml[0][9] }}";
+}
+</script>
 {% endblock %}

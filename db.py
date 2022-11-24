@@ -1,7 +1,8 @@
 import pymysql
 import config
 import datetime
-
+from urllib.parse import urlencode
+from urllib import request
 
 def verifyRefreshDate():
     db = pymysql.connect(host=config.host, port=config.port, user=config.user_name, password=config.passwd,
@@ -98,7 +99,7 @@ def gethome():
                          database=config.database, charset='utf8')
     print("successfully connected to the database!")
     cursor = db.cursor()
-    sql = "SELECT * FROM files WHERE uplink='/root';"
+    sql = "SELECT * FROM files WHERE uplink='/';"
     cursor.execute(sql)
     rest = cursor.fetchall()
     return rest
@@ -411,3 +412,26 @@ def getInteCodeInf():
     cursor.execute(sql)
     resu = cursor.fetchall()
     return resu
+
+
+def downloadredirect(route, name, email):
+    db = pymysql.connect(host=config.host, port=config.port, user=config.user_name, password=config.passwd,
+                         database=config.database, charset='utf8')
+    print("successfully connected to the database!")
+    cursor = db.cursor()
+    sql = 'UPDATE files SET download_count=download_count+1 WHERE uplink=' + '\"' + route + '\"' + 'AND name=' + '\"' + name + '\";'
+    cursor.execute(sql)
+    db.commit()
+    cursor2 = db.cursor()
+    resu = filedetail(route, name)
+    sql2 = 'UPDATE users SET total_download=total_download+1,integral=integral-' + str(resu[0][7]) + ' WHERE email="' + email +'";'
+    cursor2.execute(sql2)
+    db.commit()
+    params1 = {'': resu[0][2]}
+    downurl = urlencode(params1)[1:]
+    print(downurl)
+    url = config.alist_home + '/d/' + downurl
+    print(url)
+    redirURL = request.urlopen(url).geturl()
+    print(redirURL)
+    return redirURL

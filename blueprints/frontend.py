@@ -21,6 +21,8 @@ def login_required(func):
     async def wrapper(*args, **kwargs):
         if not session:
             return await flash('error', 'You must be logged in to access that page.', 'login')
+        if not session['email']:
+            return await flash('error', 'You must be logged in to access that page.', 'login')
         return await func(*args, **kwargs)
 
     return wrapper
@@ -38,9 +40,9 @@ async def search():
         searchtext = str(request.args['name'])
         print(searchtext)
         addhtml = db.search(searchtext.lower())
-        return await render_template('search.html', makehtml=addhtml, searchback=searchtext)
+        return await render_template('search2.html', makehtml=addhtml, searchback=searchtext)
     else:
-        return await render_template('search.html', makehtml="", searchback="想玩点儿啥gal？")
+        return await render_template('search2.html', makehtml="", searchback="想玩点儿啥gal？")
 
 
 @frontend.route('/d')
@@ -48,8 +50,11 @@ async def search():
 async def detailnull():
     if 'f' and 'n' in request.args:
         froute = str(request.args['f'])
+        print(froute)
         fname = str(request.args['n'])
+        print(fname)
         ppfile = db.filedetail(froute, fname)
+        print(ppfile)
         print(session['email'])
         user_integral = db.getuserintegral(session['email'])
         return await render_template('detail.html', url=config.redirect_url, makehtml=ppfile, dlub=config.alist_home,
@@ -62,9 +67,10 @@ async def detailnull():
 async def broseroot():
     if 'r' in request.args:
         route = str(request.args['r'])
+        if route[:2] == '//':
+            route = route[1:]
         ppback = db.getppDir(route)
         return await render_template('all.html', url=config.redirect_url, content=ppback)
-
     else:
         drivehome = db.gethome()
         return await render_template('all.html', url=config.redirect_url, content=drivehome)
@@ -164,17 +170,15 @@ async def logout_():
 @frontend.route('/dl')
 @login_required
 async def downloadredirect():
-    if 'route' and 'redirect' and 'name' in request.args:
+    if 'route' and 'name' in request.args:
         froute = str(request.args['route'])
         fname = str(request.args['name'])
-        rdr = str(request.args['redirect'])
         ppfile = db.filedetail(froute, fname)
         print(session['email'])
         user_integral = db.getuserintegral(session['email'])[0]
         if user_integral < ppfile[0][7]:
-            return 'ERROR: Integral NOT Enough!'
-
-        return await render_template('detail.html', url=config.redirect_url, makehtml=ppfile, dlub=config.alist_home,
-                                     user_integral=user_integral)
+            return await flash('error', '积分不足！', 'home')
+        downURL = db.downloadredirect(froute, fname, session['email'])
+        return await render_template('downloadredirect.html', url=downURL)
     else:
         return await render_template('404.html')
