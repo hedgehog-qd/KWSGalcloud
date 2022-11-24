@@ -349,3 +349,65 @@ def setRegisterCode(stat, code):
     cursor2.execute(sql2)
     db.commit()
     return 0  # OK
+
+
+def changeIntegral(code, worth):
+    db = pymysql.connect(host=config.host, port=config.port, user=config.user_name, password=config.passwd,
+                         database=config.database, charset='utf8')
+    print("successfully connected to the database!")
+    worth = int(worth)
+    if worth <= 0:
+        return 1  # 无效的值（小于等于0）
+    cursor = db.cursor()
+    sql = 'SELECT count(*) FROM integral_code WHERE code="' + str(code) + '";'
+    cursor.execute(sql)
+    num = cursor.fetchone()[0]
+    if num != 0:
+        return 2  # 兑换码已经存在
+    cursor2 = db.cursor()
+    sql2 = 'INSERT INTO integral_code SET code="' + str(code) + '",available=1,integral=' + str(worth) + ';'
+    cursor2.execute(sql2)
+    db.commit()
+    return 0  # OK
+
+
+def getIntegralInf():
+    db = pymysql.connect(host=config.host, port=config.port, user=config.user_name, password=config.passwd,
+                         database=config.database, charset='utf8')
+    print("successfully connected to the database!")
+    cursor = db.cursor()
+    sql = 'SELECT sum(integral) FROM users;'
+    cursor.execute(sql)
+    allIntegral = cursor.fetchone()[0]
+    cursor2 = db.cursor()
+    sql2 = 'SELECT sum(integral) FROM users WHERE is_ban=1;'
+    cursor2.execute(sql2)
+    banIntegral = cursor2.fetchone()[0]
+    cursor3 = db.cursor()
+    sql3 = 'SELECT sum(integral) FROM users WHERE is_ban=0;'
+    cursor3.execute(sql3)
+    availableIntegral = cursor3.fetchone()[0]
+    cursor4 = db.cursor()
+    sql4 = 'SELECT sum(integral) FROM integral_code;'
+    cursor4.execute(sql4)
+    totalcode = cursor4.fetchone()[0]
+    cursor5 = db.cursor()
+    sql5 = 'SELECT sum(integral) FROM integral_code WHERE available=1;'
+    cursor5.execute(sql5)
+    availableCodeIntegral = cursor5.fetchone()[0]
+    cursor6 = db.cursor()
+    sql6 = 'SELECT sum(integral) FROM integral_code WHERE available=0;'
+    cursor6.execute(sql6)
+    used = cursor6.fetchone()[0]
+    return allIntegral + totalcode, banIntegral, availableIntegral, availableCodeIntegral, used
+
+
+def getInteCodeInf():
+    db = pymysql.connect(host=config.host, port=config.port, user=config.user_name, password=config.passwd,
+                         database=config.database, charset='utf8')
+    print("successfully connected to the database!")
+    cursor = db.cursor()
+    sql = 'SELECT * FROM integral_code;'
+    cursor.execute(sql)
+    resu = cursor.fetchall()
+    return resu

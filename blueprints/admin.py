@@ -80,10 +80,24 @@ async def banuser():
     return await render_template('/admin/users.html', content=content, banned=banned, normal=normal, flash='OK!', status='success')
 
 
-@admin.route('/integral')
+@admin.route('/integral', methods=['GET', 'POST'])
 @login_required
 async def integral():
-    return await render_template('/admin/integral.html')
+    allInte, banInte, avaInte, avaCodeInte, usedCodeInte = db.getIntegralInf()
+    content = db.getInteCodeInf()
+    if request.method == 'GET':
+        return await render_template('/admin/integral.html', content=content, allInte=allInte, banInte=banInte, avaInte=avaInte, avaCodeInte=avaCodeInte, usedCodeInte=usedCodeInte)
+    code = (await request.form).get('code')
+    worth = (await request.form).get('worth')
+    stat = db.changeIntegral(code, worth)
+    if stat == 1:
+        return await render_template('/admin/integral.html', content=content, allInte=allInte, banInte=banInte, avaInte=avaInte, avaCodeInte=avaCodeInte, usedCodeInte=usedCodeInte, flash='积分值无效!', status='error')
+    if stat == 2:
+        return await render_template('/admin/integral.html', content=content, allInte=allInte, banInte=banInte, avaInte=avaInte, avaCodeInte=avaCodeInte, usedCodeInte=usedCodeInte, flash='该兑换码已存在!', status='error')
+    if stat == 0:
+        allInte, banInte, avaInte, avaCodeInte, usedCodeInte = db.getIntegralInf()
+        content = db.getInteCodeInf()
+        return await render_template('/admin/integral.html', content=content, allInte=allInte, banInte=banInte, avaInte=avaInte, avaCodeInte=avaCodeInte, usedCodeInte=usedCodeInte, flash='OK!', status='success')
 
 
 @admin.get("/manualrefresh")

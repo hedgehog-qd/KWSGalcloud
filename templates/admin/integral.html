@@ -51,39 +51,68 @@
 
 {% block main %}
     <!-- Main content -->
-    <div class="content">
+    <section class="content">
       <div class="container-fluid">
-        <div class="row">
+         <div class="row">
+                <div class="col-lg-3 col-6">
+            <!-- small card -->
+            <div class="small-box bg-success">
+              <div class="inner">
+                <h3>{{ allInte }}<sup style="font-size: 20px">+</sup></h3>
+                <p>所有可用积分(包含已兑换和未兑换)</p>
+              </div>
+
+              <a href="/admin/users" class="small-box-footer">
+                用户管理 <i class="fas fa-arrow-circle-right"></i>
+              </a>
+            </div>
+          </div>
+          <!-- ./col -->
+            <!-- small card -->
+            <div class="col-lg-3 col-6">
+            <div class="small-box bg-info">
+              <div class="inner">
+                <h3>{{ avaCodeInte }}</h3>
+                <p>未兑换的积分</p>
+              </div>
+              <div class="icon">
+                <i class="fas fa-shopping-cart"></i>
+              </div>
+              <a href="/admin/users" class="small-box-footer">
+                用户管理 <i class="fas fa-arrow-circle-right"></i>
+              </a>
+            </div>
+          </div>
+          <!-- /.col -->
+            <!-- /.info-box -->
+          </div>
         <div class="col-md-6">
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">注册邀请码</h3>
+                <h3 class="card-title">积分兑换码</h3>
               </div>
               <!-- /.card-header -->
               <div class="card-body">
                   <table id="example2" class="table table-bordered table-hover">
                   <thead>
                   <tr>
-                    <th>注册邀请码</th>
+                    <th>积分兑换码</th>
+                    <th>积分值</th>
                     <th>是否可用</th>
-                    <th>操作</th>
+                    <th>使用者UID</th>
                   </tr>
                   </thead>
                   <tbody>
                   {% for i in content %}
                   <tr>
-                  {% if i[3]==0 %}
-                  <td><a href="{{ "/d?f="+i[4]+"&n="+i[0] }}">{{ i[0] }}</a></td>
+                  <td>{{ i[0] }}</td>
+                  <td>{{ i[3] }}</td>
+                  {% if i[1]==0 %}
+                  <td><font color='red'>不可用</font></td>
                   {% else %}
-                  <td><a href="{{ "/all?r="+i[4]+"/"+i[0] }}">{{ i[0] }}</a></td>
+                  <td><font color='green'>可用</font></td>
                   {% endif %}
-                      {% if i[3]==0 %}
-                      <td>文件</td>
-                      {% else %}
-                      <td>文件夹</td>
-                      {% endif %}
-                    <td>{{ i[4] }}</td>
-                    <td>{{ i[5] }}</td>
+                  <td>{{ i[2] }}</td>
                   </tr>
                   {% endfor %}
                   </tbody>
@@ -92,23 +121,27 @@
           <!-- /.col-md-6 -->
           <!-- /.col-md-6 -->
         </div>
-            <div class="card card-info">
+    <div class="card card-info">
     <div class="card-header">
-        <h3 class="card-title">积分兑换</h3>
+        <h3 class="card-title">添加积分兑换码</h3>
     </div>
     <!-- /.card-header -->
     <!-- form start -->
-        <form class="form-horizontal" action="/user/integral" method="post">
+        <form class="form-horizontal" action="/admin/integral" method="post">
             <div class="card-body">
                 <div class="form-group row">
-                    <label for="inputPassword3" class="col-sm-2 col-form-label">积分兑换码</label>
+                    <label for="inputPassword3" class="col-sm-2 col-form-label">添加积分兑换码</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="code" name="code" placeholder="积分兑换码" onkeyup="checkpassword()">
+                        <input type="text" class="form-control" id="code" name="code" placeholder="添加积分兑换码" onkeyup="checkpassword()">
+                    </div>
+                    <label for="inputPassword3" class="col-sm-2 col-form-label">积分值</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="worth" name="worth" placeholder="积分值" onkeyup="checkpassword()">
                     </div>
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer">
-                    <button type="submit" id="submit" class="btn btn-info">提交兑换</button>
+                    <button type="submit" id="submit" class="btn btn-info">提交</button>
                 </div>
         </div>
                 <!-- /.card-footer -->
@@ -117,9 +150,32 @@
             <!-- /.card -->
         <!-- /.row -->
       </div><!-- /.container-fluid -->
-    </div>
+
+
+    <div class="col-lg-6">
+          <!-- DONUT CHART -->
+            <div class="card card-danger">
+              <div class="card-header">
+                <h3 class="card-title">所有积分分布情况</h3>
+                <div class="card-tools">
+                  <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                    <i class="fas fa-minus"></i>
+                  </button>
+                  <button type="button" class="btn btn-tool" data-card-widget="remove">
+                    <i class="fas fa-times"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="card-body">
+                <canvas id="donutChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
       </div>
-    </div>
+    </section>
+
 {% endblock %}
 {% block js %}
 <!-- DataTables  & Plugins -->
@@ -157,9 +213,45 @@
     function checkpassword() {
         document.getElementById("submit").disabled = true;
         var check = document.getElementById("code").value;
-        if(check.length > 0){
+        var checkw = document.getElementById("worth").value;
+        if(check.length > 0 && checkw.length > 0){
             document.getElementById("submit").disabled = false;
         }
     }
+</script>
+        <!-- ChartJS -->
+<script src="{{ url_for('static', filename='plugins/chart.js/Chart.min.js') }}"></script>
+<script>
+$(function () {
+    //-------------
+    //- DONUT CHART -
+    //-------------
+    // Get context with jQuery - using jQuery's .get() method.
+    var donutChartCanvas = $('#donutChart').get(0).getContext('2d')
+    var donutData        = {
+      labels: [
+          '未被兑换的积分',
+          '被ban用户的积分',
+          '正常用户的积分'
+      ],
+      datasets: [
+        {
+          data: [{{avaCodeInte}}, {{ banInte }}, {{ avaInte }}],
+          backgroundColor : ['#00EF0CFF', '#f56954', '#00c0ef'],
+        }
+      ]
+    }
+    var donutOptions     = {
+      maintainAspectRatio : false,
+      responsive : true,
+    }
+        //Create pie or douhnut chart
+    // You can switch between pie and douhnut using the method below.
+    new Chart(donutChartCanvas, {
+      type: 'doughnut',
+      data: donutData,
+      options: donutOptions
+    })
+      })
 </script>
 {% endblock %}
