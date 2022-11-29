@@ -1,0 +1,21 @@
+app_name:
+  app_name: 'KWSGalcloud'
+  app_version: '2.1'
+app_settings:
+  secret_key: 'MS114514'
+  initial_integral: 100
+onedrive:
+  redirect_url: 'https://gc.noeldev.cc'
+alist:
+  alist_url: 'https://alist.noeldev.cc/api/public/search'
+  alist_home: 'https://alist.noeldev.cc'
+  alist_passwd: ''
+  alist_path: '/'
+mysql:
+  database: 'kws'
+  user_name: 'root'
+  passwd: 'lv589398'
+  host: '172.166.96.174'
+  port: 3306
+first_use:
+  is_first_use: 1
