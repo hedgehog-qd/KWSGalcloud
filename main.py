@@ -48,5 +48,9 @@ from blueprints.user import user
 
 app.register_blueprint(user, url_prefix='/user')
 
+from blueprints.og import og
+
+app.register_blueprint(og, url_prefix='/og')
+
 if __name__ == '__main__':
     app.run(port=5000)  # blocking call

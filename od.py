@@ -5,7 +5,7 @@ import pymysql
 import db
 from urllib.parse import urlencode
 
-#import onedrivesdk
+# import onedrivesdk
 
 import db
 
@@ -34,6 +34,7 @@ def connectod():
     client.auth_provider.authenticate(code, redirect_uri, client_secret)
     """
 
+
 def request_data():
     params = {
         "path": config.alist_path,
@@ -42,6 +43,7 @@ def request_data():
     req = requests.post(config.alist_url, data=params)  # 请求连接
     req_json = req.json()  # 获取数据
     return req_json
+
 
 def refreshdb():
     db = pymysql.connect(host=config.host, port=config.port, user=config.user_name, password=config.passwd,
@@ -70,10 +72,16 @@ def refreshdb():
         print('dlink: ' + i['path'] + '/' + i['name'])
         params1 = {'': i['name']}
         downloadsafe = urlencode(params1)[1:]
-        sql = "INSERT into files set name=\"" + i['name'] + "\",uplink=\"" + i['path'] + "\",size=" + str(i['size']) + \
-              ",ftype=" + str(pp) + ",id=0,safename=\"0\"" + ",Dllink=\"" + i['path'] + '/' + i['name'] + "\",safedownload=\"" + str(downloadsafe) + "\";"
-        cursor.execute(sql)
-        db.commit()
+        if checkexist(downloadsafe, str(i['size'])) == 1:
+            sql = "INSERT into files set name=\"" + i['name'] + "\",uplink=\"" + i['path'] + "\",size=" + str(
+                i['size']) + \
+                  ",ftype=" + str(pp) + ",id=0,safename=\"0\"" + ",Dllink=\"" + i['path'] + '/' + i[
+                      'name'] + "\",safedownload=\"" + str(downloadsafe) + "\";"
+            cursor.execute(sql)
+            db.commit()
+        else:
+            continue
+
     print('done')
     return 0
 
@@ -93,4 +101,16 @@ def refresh():
             return 2
 
 
-#connectod()
+def checkexist(safename, size):
+    db = pymysql.connect(host=config.host, port=config.port, user=config.user_name, password=config.passwd,
+                         database=config.database, charset='utf8')
+    cursor = db.cursor()
+    print("successfully connected to the database!")
+    sql = 'SELECT count(*) FROM files WHERE safename="' + str(safename) + '"AND size=' + size + ';'
+    cursor.execute(sql)
+    ava = cursor.fetchone()[0]
+    if ava != 0:  # 该文件已经存在无需重复添加
+        return 0
+    return 1
+
+# connectod()
