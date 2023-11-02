@@ -60,6 +60,8 @@ async def avatar():
     newname = str(session['uid'] + int(time.time())) + '.jpg'
     pilavatar.convert("RGB").save(os.path.join('static/avatars', newname))
     db.refreshavatar(session['email'], newname)
+    del session['avatar']
+    session['avatar'] = newname
     return await flash('success', 'Successfully uploaded the new avatar', '/user/avatar')
 
 
